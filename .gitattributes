@@ -1,0 +1,11 @@
+# Treat UI files explicitly
+backend/app/static/*.js linguist-language=JavaScript
+backend/app/templates/*.html linguist-language=HTML
+backend/app/static/*.css linguist-language=CSS
+
+# Ignore generated/demo data
+backend/app/seed_data/* linguist-generated
+
+# (Optional) Ignore vendored or build outputs if you add them later
+dist/* linguist-vendored
+build/* linguist-vendored
