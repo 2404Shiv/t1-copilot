@@ -39,7 +39,7 @@ async def generate_trades(recon_queue, throttle_ms=2):
         # Sometimes generate a matching confirm (80% of time)
         # Sometimes introduce breaks (20% of time)
         await recon_queue.put(("trade", trade))
-        await asyncio.sleep(random.uniform(0.5, 3))
+        await asyncio.sleep(random.uniform(0.1, 0.5))
 
         roll = random.random()
         confirm = {
