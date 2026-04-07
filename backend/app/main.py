@@ -10,7 +10,7 @@ from .reconciler import Reconciler
 from .notifier import BreakStream
 from . import ingestion
 from fastapi.encoders import jsonable_encoder
-from . import ingestion_binance
+from .trade_generator import generate_trades
 
 app = FastAPI(title="T+1 Copilot — Same‑Day Affirmation Compliance")
 
@@ -127,7 +127,7 @@ async def _startup():
     confs  = root / "seed_data" / "dtcc_sample_confirms.csv"
     asyncio.create_task(ingestion.load_csvs(recon.queue, trades, confs, throttle_ms=2))
     # start live crypto stream
-    asyncio.create_task(ingestion_binance.stream(recon.queue, symbols=("btcusdt","ethusdt")))
+        asyncio.create_task(generate_trades(recon.queue))
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
