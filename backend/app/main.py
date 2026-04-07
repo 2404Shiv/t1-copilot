@@ -127,7 +127,7 @@ async def _startup():
     confs  = root / "seed_data" / "dtcc_sample_confirms.csv"
     asyncio.create_task(ingestion.load_csvs(recon.queue, trades, confs, throttle_ms=2))
     # start live crypto stream
-        asyncio.create_task(generate_trades(recon.queue))
+    asyncio.create_task(generate_trades(recon.queue))
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
