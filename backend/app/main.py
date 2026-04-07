@@ -140,7 +140,8 @@ async def health():
 @app.get("/breaks")
 async def get_breaks(limit: int = 200):
     brks = [b.model_dump() for b in recon.get_breaks(limit=limit)]
-    return jsonable_encoder(brks)
+    brks.sort(key=lambda x: x.get("created_at",""), reverse=True)
+    return jsonable_encoder(brks[:limit])
 
 @app.websocket("/ws")
 async def ws(ws: WebSocket):
