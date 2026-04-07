@@ -115,22 +115,7 @@ function setupControls() {
 async function boot() {
   await refreshAll();
   setupControls();
-
-  // Live push
-  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-  const ws = new WebSocket(`${proto}://${location.host}/ws`);
-  ws.onmessage = async (ev) => {
-    try {
-      const msg = JSON.parse(ev.data);
-      if (msg.type === 'break') {
-        await refreshAll();
-      }
-    } catch (e) {}
-  };
-  ws.onopen = () => ws.send('ping');
-  setInterval(() => { try { ws.send('ping'); } catch (e) {} }, 15000);
-
-  // auto refresh on by default
-  $('#autoRefresh').dispatchEvent(new Event('change'));
+  // Poll every 3 seconds — reliable on Railway (no WebSocket needed)
+  setInterval(refreshAll, 3000);
 }
 boot();
