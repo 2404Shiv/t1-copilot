@@ -117,6 +117,7 @@ app.mount("/static", StaticFiles(directory=str(root / "static")), name="static")
 templates = Jinja2Templates(directory=str(root / "templates"))
 
 stream = BreakStream()
+recon = Reconciler(streamer=stream)  # fresh instance
 recon = Reconciler(streamer=stream)
 
 @app.on_event("startup")
@@ -125,7 +126,7 @@ async def _startup():
     # keep CSV demo too (optional)
     trades = root / "seed_data" / "dtcc_sample_trades.csv"
     confs  = root / "seed_data" / "dtcc_sample_confirms.csv"
-    asyncio.create_task(ingestion.load_csvs(recon.queue, trades, confs, throttle_ms=2))
+    # asyncio.create_task(ingestion.load_csvs(recon.queue, trades, confs, throttle_ms=2))
     # start live crypto stream
     asyncio.create_task(generate_trades(recon.queue))
 
