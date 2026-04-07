@@ -25,34 +25,25 @@ async def generate_trades(queue):
         now = datetime.utcnow()
 
         trade = Trade(
-            trade_id=tid,
-            symbol=sym,
-            side=side,
-            qty=qty,
-            price=price,
-            notional=round(price*qty, 2),
-            account=acc,
-            exec_time=now,
-            settle_date=settle,
-            exec_broker=broker,
-            customer_type=random.choice(CUSTOMER_TYPES)
+            trade_id=tid, symbol=sym, side=side,
+            qty=qty, price=price, notional=round(price*qty,2),
+            account=acc, exec_time=now, settle_date=settle,
+            exec_broker=broker, customer_type=random.choice(CUSTOMER_TYPES)
         )
-        await queue.put(trade)
+        await queue.put(("trade", trade))
 
         await asyncio.sleep(random.uniform(0.2, 1.0))
 
         roll = random.random()
         confirm = Confirm(
-            trade_id=tid,
-            symbol=sym,
-            side=side,
-            qty=qty if roll > 0.15 else qty + random.randint(1, 50),
+            trade_id=tid, symbol=sym, side=side,
+            qty=qty if roll > 0.15 else qty + random.randint(1,50),
             price=price if roll > 0.12 else round(price*random.uniform(0.98,1.02),2),
-            notional=round(price*qty, 2),
+            notional=round(price*qty,2),
             account=acc if roll > 0.1 else random.choice(ACCOUNTS),
             confirm_time=datetime.utcnow(),
             settle_date=settle if roll > 0.08 else (datetime.utcnow()+timedelta(days=2)).strftime("%Y-%m-%d"),
             exec_broker=broker
         )
         if roll > 0.05:
-            await queue.put(confirm)
+            await queue.put(("confirm", confirm))

@@ -117,7 +117,6 @@ app.mount("/static", StaticFiles(directory=str(root / "static")), name="static")
 templates = Jinja2Templates(directory=str(root / "templates"))
 
 stream = BreakStream()
-recon = Reconciler(streamer=stream)  # fresh instance
 recon = Reconciler(streamer=stream)
 
 @app.on_event("startup")
